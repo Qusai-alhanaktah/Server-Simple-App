@@ -13,16 +13,16 @@ routes.post('/api/v1/calculate', (req, res, next) => {
   var result;
   switch (operation) {
     case '+':
-      result = firstNumber + secondNumber;
+      result = parseInt(firstNumber) + parseInt(secondNumber);
       break;
     case '-':
-      result = firstNumber - secondNumber;
+      result = parseInt(firstNumber) - parseInt(secondNumber);
       break;
     case '*':
-      result = firstNumber * secondNumber;
+      result = parseInt(firstNumber) * parseInt(secondNumber);
       break;
     case '/':
-      result = firstNumber / secondNumber;
+      result = parseInt(firstNumber) / parseInt(secondNumber);
       break;
     default:
       result = 'invalid operation';
