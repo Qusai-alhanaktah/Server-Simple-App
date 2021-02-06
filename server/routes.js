@@ -8,7 +8,6 @@ const Users = require('./auth.js');
 // CALCULATION API
 
 routes.post('/api/v1/calculate', (req, res, next) => {
-  console.log(req.body);
   let { firstNumber, secondNumber, operation } = req.body;
   var result;
   switch (operation) {
@@ -28,7 +27,7 @@ routes.post('/api/v1/calculate', (req, res, next) => {
       result = 'invalid operation';
       break;
   }
-  res.status(200).send(`${result}`);
+  res.status(200).json({result: result});
 });
 
 // AUTH API
