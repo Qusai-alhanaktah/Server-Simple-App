@@ -36,7 +36,7 @@ routes.post('/signup', (req, res, next) => {
   Users.findOne({username: req.body.username})
   .then(user => {
     if (user) {
-      res.status(200).send({
+      res.status(200).json({
         message : 'This user is existed',
         access: false,
         user: {},
@@ -47,7 +47,7 @@ routes.post('/signup', (req, res, next) => {
       user.save()
       .then(data => {
         let token = user.generateToken(data);
-        res.status(200).send({
+        res.status(200).json({
           message : 'Sign Up Successfully',
           access: true,
           user: {
@@ -62,7 +62,7 @@ routes.post('/signup', (req, res, next) => {
 });
 
 routes.post('/signin', basicAuth, (req, res) => {
-  res.status(200).send({
+  res.status(200).json({
     message : req.message,
     access: req.accessStatus,
     user: {
@@ -74,7 +74,7 @@ routes.post('/signin', basicAuth, (req, res) => {
 });
 
 routes.post('/changePassword', changePassword, (req, res) => {
-  res.status(200).send({
+  res.status(200).json({
     message : req.message,
     access: req.accessStatus,
     user: {
@@ -86,7 +86,7 @@ routes.post('/changePassword', changePassword, (req, res) => {
 });
 
 routes.post('/forgetPass', checkAccount, (req, res) => {
-  res.status(200).send({
+  res.status(200).json({
     message : req.message,
     access: req.accessStatus,
     user: {
