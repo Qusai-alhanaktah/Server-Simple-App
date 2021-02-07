@@ -38,6 +38,7 @@ routes.post('/signup', (req, res, next) => {
     if (user) {
       res.status(200).send({
         message : 'This user is existed',
+        access: false,
         user: {},
         token: ''
       });
@@ -48,6 +49,7 @@ routes.post('/signup', (req, res, next) => {
         let token = user.generateToken(data);
         res.status(200).send({
           message : 'Sign Up Successfully',
+          access: true,
           user: {
             username: user.username,
             email: user.email
@@ -62,6 +64,7 @@ routes.post('/signup', (req, res, next) => {
 routes.post('/signin', basicAuth, (req, res) => {
   res.status(200).send({
     message : req.message,
+    access: req.accessStatus,
     user: {
       username: req.user.username,
       email: req.user.email
@@ -73,6 +76,7 @@ routes.post('/signin', basicAuth, (req, res) => {
 routes.post('/changePassword', changePassword, (req, res) => {
   res.status(200).send({
     message : req.message,
+    access: req.accessStatus,
     user: {
       username: req.user.username,
       email: req.user.email
@@ -84,6 +88,7 @@ routes.post('/changePassword', changePassword, (req, res) => {
 routes.post('/forgetPass', checkAccount, (req, res) => {
   res.status(200).send({
     message : req.message,
+    access: req.accessStatus,
     user: {
       username: req.user.username,
       email: req.user.email
@@ -99,9 +104,11 @@ function checkAccount(req, res, next) {
       req.message = 'Create a new password';
       req.user = user;
       req.token = user.generateToken(user);
+      req.accessStatus = true;
     } else {
       req.message = 'Invalid Email or Username';
       req.user = {};
+      req.accessStatus = false;
     }
     next()
   });
@@ -119,11 +126,13 @@ function changePassword(req, res, next) {
           req.message = 'Created a new password Successfully';
           req.user = updatedUser;
           req.token = updatedUser.generateToken(updatedUser);
+          req.accessStatus = true;
           next()
         });
       });
     } else {
       req.message = 'Invalid Email or Username';
+      req.accessStatus = false;
       next()
     }
   });
@@ -150,11 +159,13 @@ function basicAuth (req, res, next) {
           req.user = {};
           req.message = user;
           req.token = '';
+          req.accessStatus = false;
           next();
         } else {
           req.user = user;
           req.message = 'Sign In Successfully';
           req.token = user.generateToken(user);
+          req.accessStatus = true;
           next();
         }
       });
